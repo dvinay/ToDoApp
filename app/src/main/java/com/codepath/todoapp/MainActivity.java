@@ -38,26 +38,18 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-    }
-    public void launchComposeView() {
-        // first parameter is the context, second is the class of the activity to launch
-        Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-//        findViewById(R.id.lvitems).toString();
-//        String getrec=textView.getText().toString();
-//
-////Create the bundle
-//        Bundle bundle = new Bundle();
-//
-////Add your data to bundle
-//        bundle.putString(“stuff”, getrec);
-//
-////Add the bundle to the intent
-//        i.putExtras(bundle);
-//
-////Fire that second activity
-//        startActivity(i);
-//        i.putExtra();
-        startActivity(i); // brings up the second activity
+
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent myIntent = new Intent(MainActivity.this, EditItemActivity.class);
+                myIntent.putExtra("data", todoItems.get(position).toString());
+                startActivity(myIntent);
+                //aToDoAdapter.notifyDataSetChanged();
+                //writeItems();
+
+            }
+        });
     }
     private void populateArrayItems() {
         todoItems = new ArrayList<String>();
