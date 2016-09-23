@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import org.apache.commons.io.FileUtils;
 
@@ -20,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> aToDoAdapter;
     ListView lvItems;
     EditText etEditText;
+    final int REQUEST_CODE = 20;
+    int itemPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +45,23 @@ public class MainActivity extends AppCompatActivity {
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                itemPosition = position;
                 Intent myIntent = new Intent(MainActivity.this, EditItemActivity.class);
                 myIntent.putExtra("data", todoItems.get(position).toString());
-                startActivity(myIntent);
-                //aToDoAdapter.notifyDataSetChanged();
-                //writeItems();
-
+                startActivityForResult(myIntent, REQUEST_CODE);
             }
         });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            String name = intent.getExtras().getString("text");
+            int code = intent.getExtras().getInt("code", 0);
+            todoItems.set(itemPosition,name.trim());
+            aToDoAdapter.notifyDataSetChanged();
+            writeItems();
+            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+        }
     }
     private void populateArrayItems() {
         todoItems = new ArrayList<String>();
@@ -62,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             todoItems = new ArrayList<String>(FileUtils.readLines(file));
         } catch(IOException e) {
-            System.out.print(e.getMessage());
+            //System.out.print(e.getMessage());
         }
     }
     private void writeItems(){

@@ -21,11 +21,12 @@
         android:id="@+id/itemEditText" />
 
     <Button
-        android:text="Button"
+        android:text="@string/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/itemEditText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="75dp"
-        android:id="@+id/button" />
+        android:id="@+id/save"
+        android:onClick="onEditItem" />
 </RelativeLayout>
